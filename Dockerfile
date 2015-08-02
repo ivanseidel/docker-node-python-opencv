@@ -24,7 +24,7 @@ RUN apt-get install -y python-opencv --no-install-recommends
 #
 # Clear cache
 #
-RUN apt-get clean && apt-get autoclean
+RUN apt-get autoclean && apt-get clean
 RUN rm -rf /var/lib/apt/lists/*
 
 #
