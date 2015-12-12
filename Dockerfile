@@ -21,6 +21,11 @@ RUN ln -s /dev/null /dev/raw1394
 #
 RUN apt-get install -y python-opencv --no-install-recommends
 
+# 
+# Install dependencies required by node-canvas
+# 
+RUN apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+
 #
 # Clear cache
 #
