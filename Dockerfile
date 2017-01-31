@@ -1,30 +1,49 @@
 # Pull base image.
-FROM library/ubuntu
+FROM node:6.9.4
 
 MAINTAINER Ivan Seidel <ivanseidel@gmail.com>
 
-RUN apt-get update
+# RUN apt-get update
 
 #
 # Python
 #
-RUN apt-get install -y python python-dev python-pip python-virtualenv
+# node base image already has python 2.7
 
 #
-# Node.js and NPM
+# Essentials
 #
-RUN apt-get install -y nodejs nodejs-legacy npm git --no-install-recommends
-RUN ln -s /dev/null /dev/raw1394
+RUN apt-get update
+RUN apt-get install -y build-essential
+
+
+#
+# Install OpenCV Dependencies
+#
+RUN apt-get install -y cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev
+RUN apt-get install -y python-dev python-numpy libtbb2 libtbb-dev libjpeg-dev libpng-dev libtiff-dev libjasper-dev libdc1394-22-dev
 
 #
 # Install OpenCV
 #
-RUN apt-get install -y python-opencv --no-install-recommends
+RUN git clone https://github.com/opencv/opencv.git
+RUN cd opencv && mkdir build && cd build
+RUN cd opencv/build && cmake \
+	-D CMAKE_BUILD_TYPE=RELEASE \
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
+	-D INSTALL_C_EXAMPLES=OFF \
+	-D INSTALL_PYTHON_EXAMPLES=OFF \
+	-D BUILD_EXAMPLES=OFF \
+	..
+RUN cd opencv/build && make
+RUN cd opencv/build && make install
+RUN rm -rf opencv
 
 # 
-# Install dependencies required by node-canvas
+# Install dependencies required by python
 # 
-RUN apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+RUN apt-get install -y python-pip
+RUN pip install pillow
 
 #
 # Clear cache
