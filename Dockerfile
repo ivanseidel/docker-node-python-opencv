@@ -35,9 +35,7 @@ RUN cd opencv/build && cmake \
 	-D INSTALL_PYTHON_EXAMPLES=OFF \
 	-D BUILD_EXAMPLES=OFF \
 	..
-RUN cd opencv/build && make
-RUN cd opencv/build && make install
-RUN rm -rf opencv
+RUN cd opencv/build && make && make install && cd ../../ && rm -rf opencv
 
 # 
 # Install dependencies required by python
